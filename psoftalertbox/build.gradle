@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+group = 'com.dpouya.lib'
+version = '1.0.0'
+
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
+
+    signingConfigs {
+        pdark{
+            storeFile file("config/release.keystore")
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+            v2SigningEnabled false
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 30
+        versionCode 1
+        versionName version
+
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            signingConfig  signingConfigs.pdark
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    libraryVariants.all { variant ->
+        variant.outputs.all { output ->
+            def buildType = gradle.startParameter.taskNames.any{it.toLowerCase().contains("debug")}?"debug":"release"
+            if(!gradle.startParameter.taskNames.any{it.toLowerCase().contains("debug")}){
+                outputFileName = "../../../../../output/psoft-${archivesBaseName}-${buildType}.aar"
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation (name :'psoft-psoftlayoutlib-release', ext: 'aar')
+    implementation 'com.wang.avi:library:2.1.3'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+}
+repositories{
+    flatDir{
+        dirs '../../output'
+    }
+}

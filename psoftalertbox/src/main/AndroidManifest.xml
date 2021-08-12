@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ir.psoft.psoftalertbox" >
+    <application>
+        <activity
+            android:name=".Ui.AlertBoxActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.CustomDialog" />
+    </application>
+</manifest>
